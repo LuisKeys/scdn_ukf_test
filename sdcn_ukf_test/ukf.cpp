@@ -58,13 +58,26 @@ void UKF::GenerateSigmaPoints(MatrixXd* Xsig_out) {
 
 	//calculate sigma points ...
 	//set sigma points as columns of matrix Xsig
+	const float sqrt_3 = sqrt(lambda + n_x);
+
+	Xsig.col(0) << x;
+
+	for (int i = 1; i < n_x + 1; ++i) {
+		Xsig.col(i) << x + sqrt_3 * A.col(i - 1);
+	}
+
+	const int upper_limit = n_x + 1;
+	for (int i = upper_limit; i < 2 * n_x + 1; ++i) {
+		Xsig.col(i) << x - sqrt_3 * A.col(i - upper_limit);
+	}
 
 	/*******************************************************************************
 	* Student part end
 	******************************************************************************/
 
 	//print result
-	//std::cout << "Xsig = " << std::endl << Xsig << std::endl;
+	std::cout << "Xsig = " << std::endl << Xsig << std::endl;
+	_gettche();
 
 	//write result
 	*Xsig_out = Xsig;
